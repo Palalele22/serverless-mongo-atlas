@@ -1,0 +1,37 @@
+org: palalele
+app: serverless-mongo-atlas
+service: serverless-mongo-atlas
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  memorySize: 128
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+
+functions:
+  createUser:
+    handler: src/handlers/createUser.handler
+    events:
+      - httpApi:
+          path: /users
+          method: POST
+  getAll:
+    handler: src/handlers/getAll.handler
+    events:
+      - httpApi:
+          path: /users
+          method: GET
+  getUser:
+    handler: src/handlers/getUser.handler
+    events:
+      - httpApi:
+          path: /users/{email}
+          method: GET
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
